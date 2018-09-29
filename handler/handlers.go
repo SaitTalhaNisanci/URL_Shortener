@@ -23,13 +23,13 @@ import (
 	"github.com/URL_Shortener/shortener"
 )
 
-func ShortenHandler(w http.ResponseWriter, r *http.Request) {
+func ShortenHandler(w http.ResponseWriter, r *http.Request, service *shortener.Service) {
 	url, err := getURL(r.URL.Query())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	shortened, err := shortener.Shorten(url)
+	shortened, err := service.Shorten(url)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

@@ -14,7 +14,12 @@
 
 package shortener
 
-import "math/rand"
+import (
+	"math/rand"
+
+	"github.com/URL_Shortener/db"
+	"github.com/URL_Shortener/model"
+)
 
 const (
 	//letterNumberBytes is the available chars that can be used in the shortened url.
@@ -24,16 +29,26 @@ const (
 	shortenedURLSize = 8
 )
 
-func Shorten(url string) (string, error) {
-	s := randStringBytes(shortenedURLSize)
+type Service struct {
+	db *db.DB
+}
+
+func New(db *db.DB) *Service {
+	return &Service{db: db}
+}
+
+func (s *Service) Shorten(longURL string) (string, error) {
+	shortURL := randStringBytes(shortenedURLSize)
 	// TODO:: generate a new one as long as it is not unique.
 	// for db.exists(s) {
 	//  	s := randStringBytes(shortenedURLSize)
 	// }
-	// TODO:: Store the url with its unique hash in database
-
-	// TODO:: Return the shortened url
-	return s, nil
+	url := model.NewURL(shortURL, longURL)
+	err := s.db.Insert(url)
+	if err != nil {
+		return "", err
+	}
+	return shortURL, nil
 }
 
 func randStringBytes(n int) string {

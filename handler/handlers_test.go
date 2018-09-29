@@ -25,6 +25,6 @@ import (
 func TestShortenHandler(t *testing.T) {
 	req, _ := http.NewRequest(http.MethodPost, "/shorten", nil)
 	res := httptest.NewRecorder()
-	ShortenHandler(res, req)
+	ShortenHandler(res, req, nil)
 	assert.Equal(t, res.Code, http.StatusBadRequest)
 }
