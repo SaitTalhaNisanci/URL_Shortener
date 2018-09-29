@@ -15,18 +15,10 @@
 package model
 
 type URL struct {
-	short string
-	long  string
+	Short string
+	Long  string
 }
 
 func NewURL(short string, long string) *URL {
-	return &URL{long: long, short: short}
-}
-
-func (u *URL) Short() string {
-	return u.short
-}
-
-func (u *URL) Long() string {
-	return u.long
+	return &URL{Long: long, Short: short}
 }

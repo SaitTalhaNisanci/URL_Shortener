@@ -56,7 +56,7 @@ func (d *DB) Exists(shortURL string) (bool, error) {
 }
 
 func (d *DB) Insert(url *model.URL) error {
-	_, err := d.Exec("INSERT INTO url (long_url, short_url) VALUES (?, ?)", url.Long(), url.Short())
+	_, err := d.Exec("INSERT INTO url (long_url, short_url) VALUES (?, ?)", url.Long, url.Short)
 	return err
 }
 

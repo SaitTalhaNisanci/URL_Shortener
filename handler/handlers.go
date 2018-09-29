@@ -21,21 +21,23 @@ import (
 	"encoding/json"
 
 	"github.com/URL_Shortener/db"
+	"github.com/URL_Shortener/model"
 	"github.com/URL_Shortener/shortener"
 )
 
 func ShortenHandler(w http.ResponseWriter, r *http.Request, service *shortener.Service) {
-	url, err := getURL(r.URL.Query())
+	longURL, err := getURL(r.URL.Query())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	shortened, err := service.Shorten(url)
+	shortURL, err := service.Shorten(longURL)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+	url := model.NewURL(shortURL, longURL)
 	// encode and send the shortened url as JSON
-	json.NewEncoder(w).Encode(shortened)
+	json.NewEncoder(w).Encode(url)
 }
 
 func OriginalURLHandler(w http.ResponseWriter, r *http.Request, db *db.DB) {
@@ -45,10 +47,11 @@ func OriginalURLHandler(w http.ResponseWriter, r *http.Request, db *db.DB) {
 		return
 	}
 	log.Println(shortURL)
-	originalURL, err := db.RetriveLongURL(shortURL)
+	longURL, err := db.RetriveLongURL(shortURL)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	json.NewEncoder(w).Encode(originalURL)
+	url := model.NewURL(shortURL, longURL)
+	json.NewEncoder(w).Encode(url)
 }
