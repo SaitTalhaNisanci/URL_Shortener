@@ -30,7 +30,6 @@ func Shorten(url string) (string, error) {
 	// for db.exists(s) {
 	//  	s := randStringBytes(shortenedURLSize)
 	// }
-
 	// TODO:: Store the url with its unique hash in database
 
 	// TODO:: Return the shortened url
