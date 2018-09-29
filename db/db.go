@@ -61,7 +61,7 @@ func (d *DB) Insert(url *model.URL) error {
 }
 
 func (d *DB) RetriveLongURL(shortURL string) (string, error) {
-	res := d.QueryRow("SELECT long_url FROM url WHERE short_url==" + shortURL)
+	res := d.QueryRow("SELECT long_url FROM url WHERE short_url==?", shortURL)
 	var longURL string
 	err := res.Scan(&longURL)
 	if err != nil {
