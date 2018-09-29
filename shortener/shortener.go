@@ -15,33 +15,28 @@
 package shortener
 
 import (
-	"math/rand"
-
-	"time"
-
 	"github.com/URL_Shortener/db"
 	"github.com/URL_Shortener/model"
+	"github.com/URL_Shortener/shortener/randStr"
 )
 
 const (
-	//letterNumberBytes is the available chars that can be used in the shortened url.
-	letterNumberBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 	// shortenedURLSize size is the size of shortened url.
 	shortenedURLSize = 8
 )
 
 type Service struct {
-	db *db.DB
+	db      *db.DB
+	randStr *randStr.RandStr
 }
 
 func New(db *db.DB) *Service {
-	rand.Seed(time.Now().UTC().UnixNano())
-	return &Service{db: db}
+	return &Service{db: db, randStr: randStr.New(shortenedURLSize)}
 }
 
 func (s *Service) Shorten(longURL string) (string, error) {
-	shortURL := RandStringBytes(shortenedURLSize)
+	shortURL := s.randStr.Next()
 	// TODO:: generate a new one as long as it is not unique.
 	// for db.exists(s) {
 	//  	s := RandStringBytes(shortenedURLSize)
@@ -52,12 +47,4 @@ func (s *Service) Shorten(longURL string) (string, error) {
 		return "", err
 	}
 	return shortURL, nil
-}
-
-func RandStringBytes(n int) string {
-	b := make([]byte, n)
-	for i := range b {
-		b[i] = letterNumberBytes[rand.Intn(len(letterNumberBytes))]
-	}
-	return string(b)
 }
