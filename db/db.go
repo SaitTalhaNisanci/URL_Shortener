@@ -25,10 +25,13 @@ import (
 
 const driverName = "sqlite3"
 
+// DB is the database which has sql.DB embedded in it.
 type DB struct {
 	*sql.DB
 }
 
+// New opens the DB from the given dataSourcePath. It returns an error
+// if the given path is not valid or there is an error while opening the database.
 func New(dataSourcePath string) (*DB, error) {
 	database := &DB{}
 	db, err := database.open(dataSourcePath)
@@ -47,6 +50,7 @@ func (d *DB) open(dataSourcePath string) (*sql.DB, error) {
 	return db, err
 }
 
+// Exists returns true if the given shortURL exists in the database.
 func (d *DB) Exists(shortURL string) (bool, error) {
 	res, err := d.Query("SELECT * FROM url WHERE short_url == ?", shortURL)
 	if err != nil {
@@ -55,11 +59,14 @@ func (d *DB) Exists(shortURL string) (bool, error) {
 	return res.Next(), nil
 }
 
+// Insert inserts the given url model to the database.
 func (d *DB) Insert(url *model.URL) error {
 	_, err := d.Exec("INSERT INTO url (long_url, short_url) VALUES (?, ?)", url.Long, url.Short)
 	return err
 }
 
+// RetriveLongURL retrieves the long url of the given shortURL.
+// Note that there could be at most one result since shortURL field is unique.
 func (d *DB) RetriveLongURL(shortURL string) (string, error) {
 	res := d.QueryRow("SELECT long_url FROM url WHERE short_url==?", shortURL)
 	var longURL string

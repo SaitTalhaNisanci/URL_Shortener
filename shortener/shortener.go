@@ -31,10 +31,12 @@ type Service struct {
 	randStr *randStr.RandStr
 }
 
+// New creates and returns a new shortener service.
 func New(db *db.DB) *Service {
 	return &Service{db: db, randStr: randStr.New(shortenedURLSize)}
 }
 
+// Shorten shortens a given longURL. It never generates a short URL that already exists in the database.
 func (s *Service) Shorten(longURL string) (string, error) {
 	shortURL := s.randStr.Next()
 	found, _ := s.db.Exists(shortURL)

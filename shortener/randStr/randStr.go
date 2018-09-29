@@ -28,11 +28,13 @@ const (
 	chanSize = 300
 )
 
+// RandStr is used to generate random strings with size n.
 type RandStr struct {
 	n       int
 	strChan chan string
 }
 
+// New returns a new RandStr. It seeds the random with the current time.
 func New(n int) *RandStr {
 	rand.Seed(time.Now().UTC().UnixNano())
 	r := &RandStr{n: n, strChan: make(chan string, chanSize)}
@@ -52,6 +54,7 @@ func (r *RandStr) generate() {
 
 }
 
+// Next returns a new random string from strChan. It blocks until a new string is generated.
 func (r *RandStr) Next() string {
 	return <-r.strChan
 }
