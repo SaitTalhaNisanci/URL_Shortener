@@ -18,6 +18,7 @@ import (
 	"database/sql"
 	"io/ioutil"
 	// for sqlite3
+
 	"github.com/URL_Shortener/model"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -51,10 +52,20 @@ func (d *DB) Exists(shortURL string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	return !res.NextResultSet(), nil
+	return res.Next(), nil
 }
 
 func (d *DB) Insert(url *model.URL) error {
-	_, err := d.Exec("Insert into url (long_url, short_url) values (?, ?)", url.Long(), url.Short())
+	_, err := d.Exec("INSERT INTO url (long_url, short_url) VALUES (?, ?)", url.Long(), url.Short())
 	return err
+}
+
+func (d *DB) RetriveLongURL(shortURL string) (string, error) {
+	res := d.QueryRow("SELECT long_url FROM url WHERE short_url==" + shortURL)
+	var longURL string
+	err := res.Scan(&longURL)
+	if err != nil {
+		return "", err
+	}
+	return longURL, nil
 }

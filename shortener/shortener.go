@@ -17,6 +17,8 @@ package shortener
 import (
 	"math/rand"
 
+	"time"
+
 	"github.com/URL_Shortener/db"
 	"github.com/URL_Shortener/model"
 )
@@ -34,14 +36,15 @@ type Service struct {
 }
 
 func New(db *db.DB) *Service {
+	rand.Seed(time.Now().UTC().UnixNano())
 	return &Service{db: db}
 }
 
 func (s *Service) Shorten(longURL string) (string, error) {
-	shortURL := randStringBytes(shortenedURLSize)
+	shortURL := RandStringBytes(shortenedURLSize)
 	// TODO:: generate a new one as long as it is not unique.
 	// for db.exists(s) {
-	//  	s := randStringBytes(shortenedURLSize)
+	//  	s := RandStringBytes(shortenedURLSize)
 	// }
 	url := model.NewURL(shortURL, longURL)
 	err := s.db.Insert(url)
@@ -51,7 +54,7 @@ func (s *Service) Shorten(longURL string) (string, error) {
 	return shortURL, nil
 }
 
-func randStringBytes(n int) string {
+func RandStringBytes(n int) string {
 	b := make([]byte, n)
 	for i := range b {
 		b[i] = letterNumberBytes[rand.Intn(len(letterNumberBytes))]

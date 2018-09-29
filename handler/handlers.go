@@ -20,6 +20,7 @@ import (
 
 	"encoding/json"
 
+	"github.com/URL_Shortener/db"
 	"github.com/URL_Shortener/shortener"
 )
 
@@ -33,7 +34,21 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request, service *shortener.S
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	log.Println(shortened)
 	// encode and send the shortened url as JSON
 	json.NewEncoder(w).Encode(shortened)
+}
+
+func OriginalURLHandler(w http.ResponseWriter, r *http.Request, db *db.DB) {
+	shortURL, err := getShortURL(r.URL.Query())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	log.Println(shortURL)
+	originalURL, err := db.RetriveLongURL(shortURL)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	json.NewEncoder(w).Encode(originalURL)
 }

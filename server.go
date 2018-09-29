@@ -17,15 +17,23 @@ const (
 
 	// shortenURLEndpoint is the endpoint to shorten a given url.
 	shortenURLEndpoint = "/shorten"
+
+	// originalURLEndpoint the endpoint to get the original URL for a shortened URL.
+	originalURLEndpoint = "/original"
 )
 
 // initializeRouter creates a mux router and adds handle functions.
-func initializeRouter(service *shortener.Service) *mux.Router {
+func initializeRouter(service *shortener.Service, database *db.DB) *mux.Router {
 	r := mux.NewRouter()
 	// add shortenURL POST endpoint to the router
 	r.HandleFunc(shortenURLEndpoint, func(w http.ResponseWriter, r *http.Request) {
 		handler.ShortenHandler(w, r, service)
 	}).Methods(http.MethodPost)
+
+	r.HandleFunc(originalURLEndpoint, func(w http.ResponseWriter, r *http.Request) {
+		handler.OriginalURLHandler(w, r, database)
+	}).Methods(http.MethodGet)
+
 	return r
 }
 
@@ -35,7 +43,7 @@ func main() {
 		log.Fatal("Error while opening the database", err)
 	}
 	service := shortener.New(database)
-	r := initializeRouter(service)
+	r := initializeRouter(service, database)
 	// start the server
 	err = http.ListenAndServe(":8080", r)
 	if err != nil {
