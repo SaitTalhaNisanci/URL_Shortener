@@ -17,14 +17,23 @@ package handler
 import (
 	"log"
 	"net/http"
+
+	"encoding/json"
+
+	"github.com/URL_Shortener/shortener"
 )
 
 func ShortenHandler(w http.ResponseWriter, r *http.Request) {
 	url, err := getURL(r.URL.Query())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
-	log.Println(url)
-	// TODO :: shorten the given url
-	// TODO :: return the shortened url
+	shortened, err := shortener.Shorten(url)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	log.Println(shortened)
+	// encode and send the shortened url as JSON
+	json.NewEncoder(w).Encode(shortened)
 }
