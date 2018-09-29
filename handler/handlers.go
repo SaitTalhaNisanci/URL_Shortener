@@ -15,7 +15,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 
 	"encoding/json"
@@ -60,7 +59,6 @@ func OriginalURLHandler(w http.ResponseWriter, r *http.Request, db *db.DB) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	log.Println(shortURL)
 	longURL, err := db.RetriveLongURL(shortURL)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
