@@ -37,10 +37,12 @@ func New(db *db.DB) *Service {
 
 func (s *Service) Shorten(longURL string) (string, error) {
 	shortURL := s.randStr.Next()
-	// TODO:: generate a new one as long as it is not unique.
-	// for db.exists(s) {
-	//  	s := RandStringBytes(shortenedURLSize)
-	// }
+	found, _ := s.db.Exists(shortURL)
+	// Generate a new string as long as it is not unique.
+	for found {
+		shortURL = s.randStr.Next()
+		found, _ = s.db.Exists(shortURL)
+	}
 	url := model.NewURL(shortURL, longURL)
 	err := s.db.Insert(url)
 	if err != nil {
