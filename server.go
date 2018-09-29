@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"log"
+	"github.com/URL_Shortener/handler"
 )
 
 const (
@@ -17,7 +18,7 @@ func initializeRouter() *mux.Router {
 	r := mux.NewRouter()
 	// add shortenURL POST endpoint to the router
 	r.HandleFunc(shortenURLEndpoint, func(w http.ResponseWriter, r *http.Request) {
-		//TODO :: add handler
+			handler.ShortenHandler(w, r)
 		}).Methods(http.MethodPost)
 	return r
 }
