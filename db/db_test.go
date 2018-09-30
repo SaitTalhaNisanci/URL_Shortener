@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/URL_Shortener/model"
+	"github.com/URL_Shortener/shortener/randStr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -18,7 +19,7 @@ func TestNew(t *testing.T) {
 func TestDB_ExistsAndInsert(t *testing.T) {
 	db, err := New("../shortener.db")
 	require.NoError(t, err)
-	shortURL := "sas12122"
+	shortURL := randStr.New(8).Next()
 	url := model.NewURL(shortURL, "www.google.com")
 	err = db.Insert(url)
 	require.NoError(t, err)
