@@ -18,6 +18,7 @@ import (
 // "Long" : ..
 //}
 func ShortenHandler(w http.ResponseWriter, r *http.Request, service *shortener.Service) {
+	setupResponse(&w, r)
 	longURL, err := getURL(r.URL.Query())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -40,6 +41,7 @@ func ShortenHandler(w http.ResponseWriter, r *http.Request, service *shortener.S
 // "Long" : ..
 //}
 func OriginalURLHandler(w http.ResponseWriter, r *http.Request, db *db.DB) {
+	setupResponse(&w, r)
 	shortURL, err := getShortURL(r.URL.Query())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -52,4 +54,8 @@ func OriginalURLHandler(w http.ResponseWriter, r *http.Request, db *db.DB) {
 	}
 	url := model.NewURL(shortURL, longURL)
 	json.NewEncoder(w).Encode(url)
+}
+
+func setupResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
