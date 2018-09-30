@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
+import './styles.css';
 import axios from 'axios';
+import {Button, Alert, FormControl} from 'react-bootstrap';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+
+
 
 class App extends Component {
 
@@ -43,9 +48,26 @@ class App extends Component {
     render(){
         return (
             <div>
-                <input type="text" onChange={this.updateInput}></input>
-                <input type="submit" value="Short URL" onClick={this.handleSubmit} ></input>
-                {this.state.short_url}
+                <Alert bsStyle="warning" className="text-center">
+                    <strong>Welcome!</strong> Enter URL to shorten it.
+                </Alert>
+                <FormControl
+                    className="text-center"
+                    type="text"
+                    placeholder="Enter URL to shorten"
+                    onChange={this.updateInput}
+                />
+                <div class="wrapper">
+                    <Button class= "button" bsStyle="success" onClick={this.handleSubmit}>Shorten</Button>
+                </div>
+
+                <CopyToClipboard text={this.state.short_url}>
+                    <div class="wrapper">
+                        <Button class="button" bsStyle="primary" >Copy</Button>
+                        <p className="text-center">{this.state.short_url}</p>
+                    </div>
+
+                </CopyToClipboard>
             </div>
         );
     }
