@@ -48,26 +48,31 @@ class App extends Component {
     render(){
         return (
             <div>
-                <Alert bsStyle="warning" className="text-center">
-                    <strong>Welcome!</strong> Enter URL to shorten it.
-                </Alert>
-                <FormControl
-                    className="text-center"
-                    type="text"
-                    placeholder="Enter URL to shorten"
-                    onChange={this.updateInput}
-                />
-                <div class="wrapper">
-                    <Button class= "button" bsStyle="success" onClick={this.handleSubmit}>Shorten</Button>
-                </div>
+                <div className="wrapper">
+                    <div className="main">
+                        <Alert bsStyle="warning" className="text-center">
+                            <strong>Welcome!</strong> Enter URL to shorten it.
+                        </Alert>
+                        <FormControl
+                            className="form"
+                            type="text"
+                            placeholder="Enter URL to shorten"
+                            onChange={this.updateInput}
+                        />
 
-                <CopyToClipboard text={this.state.short_url}>
-                    <div class="wrapper">
-                        <Button class="button" bsStyle="primary" >Copy</Button>
-                        <p className="text-center">{this.state.short_url}</p>
+                        <div >
+                            <Button className= "button" bsStyle="success" onClick={this.handleSubmit}>Shorten</Button>
+                        </div>
+
+                        <CopyToClipboard text={this.state.short_url}>
+                            <div>
+                                <Button class="button" bsStyle="primary" >Copy</Button>
+                                <p className="text-center">{this.state.short_url}</p>
+                            </div>
+
+                        </CopyToClipboard>
                     </div>
-
-                </CopyToClipboard>
+                </div>
             </div>
         );
     }
