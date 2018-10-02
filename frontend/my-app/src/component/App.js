@@ -36,7 +36,7 @@ class App extends Component {
                 'Content-Type': 'application/json',
             },
         }).then( resp => {
-            this.setState({long_url: this.state.long_url, short_url:resp.data['Short']});
+            this.setState({long_url: this.state.long_url, short_url:serverIP + ':3000/' + resp.data['Short']});
         }).catch( err => {
             console.log(err);
         });
