@@ -6,6 +6,7 @@ import {Button, Alert, FormControl} from 'react-bootstrap';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 
+const serverIP = "http://18.222.252.40";
 
 class App extends Component {
 
@@ -32,7 +33,7 @@ class App extends Component {
         // TODO :: make this call simpler
         axios({
             method: 'post',
-            url: 'http://localhost:8080/shorten?url=' + this.state.long_url,
+            url: serverIP + ':8080/shorten?url=' + this.state.long_url,
             headers: {
                 'Content-Type': 'application/json',
             },
