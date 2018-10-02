@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios/index";
-
+import serverIP from './constants';
 
 class Original extends Component {
     constructor(props){
@@ -10,7 +10,7 @@ class Original extends Component {
             long_url : '',
             short_url : ''
         }
-        var request_url ='http://localhost:8080/original?short_url=' + this.props.match.params.id;
+        var request_url =serverIP + ':8080/original?short_url=' + this.props.match.params.id;
         axios.get(request_url)
             .then(res => {
                 window.location.assign(res.data['Long']);

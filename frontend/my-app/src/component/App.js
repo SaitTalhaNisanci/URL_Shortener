@@ -4,9 +4,7 @@ import './styles.css';
 import axios from 'axios';
 import {Button, Alert, FormControl} from 'react-bootstrap';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-
-
-const serverIP = "http://18.222.252.40";
+import serverIP from './constants';
 
 class App extends Component {
 
